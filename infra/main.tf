@@ -26,8 +26,3 @@ module "ec2" {
   depends_on = [ module.sg ]
 }
 
-module "s3" {
-  source      = "./modules/s3"
-  bucket_name = var.yafits3
-  versioning  = var.s3_versioning
-}
