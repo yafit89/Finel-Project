@@ -1,3 +1,2 @@
-Flask
-Flask-MySQLdb
-boto3
+pytest==8.3.3
+requests==2.32.3
