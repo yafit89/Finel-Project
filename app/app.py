@@ -1,8 +1,23 @@
 import os
 from flask import Flask, render_template, send_file
 import json
+from flask_mysqldb import MySQL
+import boto3
 
 app = Flask(__name__)
+
+# MySQL Configuration
+app.config['MYSQL_HOST'] = os.getenv("MYSQL_HOST", "localhost")
+app.config['MYSQL_USER'] = os.getenv("MYSQL_USER", "root")
+app.config['MYSQL_PASSWORD'] = os.getenv("MYSQL_PASSWORD", "")
+app.config['MYSQL_DB'] = os.getenv("MYSQL_DB", "photo_viewer")
+
+mysql = MySQL(app)
+
+# S3 Configuration
+S3_BUCKET = os.getenv("S3_BUCKET", "yafit-s3-bucket")
+S3_REGION = os.getenv("S3_REGION", "your-region")
+s3_client = boto3.client('s3', region_name=S3_REGION)
 
 # Function to load the configuration file
 def load_config(config_path="config.json"):
@@ -13,19 +28,25 @@ def load_config(config_path="config.json"):
     except FileNotFoundError:
         return "Welcome to the Photo Viewer!"
 
-# Function to get photos from a local folder
-def get_local_photos(folder_path="photos"):
+# Function to get photos from MySQL
+def get_photos_from_db():
     try:
-        if os.path.exists(folder_path):
-            return [
-                file for file in os.listdir(folder_path)
-                if file.lower().endswith((".png", ".jpg", ".jpeg"))
-            ]
-        else:
-            print(f"Error: Folder '{folder_path}' does not exist.")
-            return []
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT image_key FROM images")
+        return [row[0] for row in cursor.fetchall()]
     except Exception as e:
-        print(f"Error retrieving files from folder: {e}")
+        print(f"Error fetching photos from MySQL: {e}")
+        return []
+
+# Function to get presigned URLs for S3 images
+def get_s3_urls(image_keys):
+    try:
+        return [
+            s3_client.generate_presigned_url('get_object', Params={'Bucket': S3_BUCKET, 'Key': key}, ExpiresIn=3600)
+            for key in image_keys
+        ]
+    except Exception as e:
+        print(f"Error generating S3 URLs: {e}")
         return []
 
 @app.route("/")
@@ -34,9 +55,11 @@ def index():
     folder_path = os.getenv("PHOTO_FOLDER", "photos")
 
     welcome_message = load_config()
-    photos = get_local_photos(folder_path)
+    local_photos = get_local_photos(folder_path)
+    db_photos = get_photos_from_db()
+    s3_urls = get_s3_urls(db_photos)
 
-    return render_template("index.html", welcome_message=welcome_message, photos=photos)
+    return render_template("index.html", welcome_message=welcome_message, local_photos=local_photos, s3_photos=s3_urls)
 
 @app.route("/photo/<path:photo_key>")
 def photo(photo_key):
