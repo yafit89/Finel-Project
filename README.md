@@ -1,3 +1,4 @@
 # Finel-Project
 
-![alt text](<Screenshot 2024-12-19 at 15.05.24.png>)
+
+![project](https://github.com/user-attachments/assets/696a8a12-3549-4648-a0db-970e71871c40)
