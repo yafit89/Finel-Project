@@ -35,7 +35,7 @@ jobs:
 
             kubectl create ns pyui || true
 
-            # Apply all manifests
+            Apply all manifests
             kubectl apply -f configmap.yaml
             kubectl apply -f deployment.yaml
             kubectl apply -f service.yaml
