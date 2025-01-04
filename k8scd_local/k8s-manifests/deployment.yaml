@@ -15,13 +15,26 @@ spec:
     spec:
       containers:
       - name: python-app
-        image: yafit89/pyui:v1
+        image: yafit12/pyui:v1
         ports:
         - containerPort: 5000
         volumeMounts:
         - name: config-volume
           mountPath: /app/config.json
           subPath: config.json
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      restartPolicy: Always
       volumes:
       - name: config-volume
         configMap:
