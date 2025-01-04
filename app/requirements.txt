@@ -1,6 +1,3 @@
-flask
-pytest
-requests
 Flask
 Flask-MySQLdb
 boto3
