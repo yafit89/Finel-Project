@@ -5,7 +5,11 @@ variable "ami" {
 variable "instance_type" {
   default = "t2.medium"
 }
-
+variable "s3_bucket_name" {
+  description = "Name of the S3 bucket"
+  type        = string
+  default     = "yafit-s3-bucket"
+}
 variable "ssh_key_name" {
   type    = string
   default = "vockey"

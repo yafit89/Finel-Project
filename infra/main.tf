@@ -10,7 +10,19 @@ module "sg" {
   vpc_id      = module.vpc.vpc_id
   extra_ports = try(each.value.extra_ports, [])
 }
+resource "aws_s3_bucket" "photo_bucket" {
+  bucket = var.s3_bucket_name
+  acl    = "private"
 
+  tags = {
+    Name        = "Photo Viewer Bucket"
+    Environment = "Production"
+  }
+}
+
+output "s3_bucket_name" {
+  value = aws_s3_bucket.photo_bucket.bucket
+}
 module "ec2" {
   source            = "./modules/ec2"
   for_each          = var.ec2_map
