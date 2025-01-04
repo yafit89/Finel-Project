@@ -5,7 +5,7 @@ on:
   push:
     branches:
         - test
-        - main
+         - main
 #     paths-ignore:
 #       - .github/workflows/cicd.yaml
 #   pull_request:
@@ -42,8 +42,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Debug: List files in app/
-        run: ls -la app/
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -68,7 +67,7 @@ jobs:
     steps:
       - name: Pull Docker image
         run: |
-          docker pull d4v5he/users_app:v1
+          docker pull yafit12/users_app:v1
 
       - name: Docker Run
         run: |
