@@ -33,13 +33,7 @@ jobs:
           script: |
             cd ~/repo/k8s-manifests
 
-            kubectl create ns pyui || true
-
-            # Apply all manifests
-            kubectl apply -f configmap.yaml
-            kubectl apply -f deployment.yaml
-            kubectl apply -f service.yaml
-      
+            kubectl create ns pyui || tru
       
       - name: Set up Kubernetes
         run: |
