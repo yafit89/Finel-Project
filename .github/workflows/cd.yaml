@@ -1,6 +1,9 @@
 name: CD
 on:
   workflow_dispatch:
+     push:
+       branches:
+        - main
     inputs:
       EC2_IP:
         description: "3.87.64.118"
