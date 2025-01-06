@@ -14,8 +14,8 @@ jobs:
 
       - name: Set up Kubernetes
         run: |
-          kubectl apply -f k8s-manifests/deployment.yaml
-          kubectl apply -f k8s-manifests/service.yaml
-          kubectl apply -f k8s-manifests/statefulset-mysql.yaml
-          kubectl apply -f k8s-manifests/configmap.yaml
-          kubectl apply -f k8s-manifests/secret.yaml
+          kubectl apply -f k8scd_local/k8s-manifests/deployment.yaml
+          kubectl apply -f k8scd_local/k8s-manifests/service.yaml
+          kubectl apply -f k8scd_local/k8s-manifests/statefulset-mysql.yaml
+          kubectl apply -f k8scd_local/k8s-manifests/configmap.yaml
+          kubectl apply -f k8scd_local/k8s-manifests/secret.yaml
