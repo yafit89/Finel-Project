@@ -1,12 +1,17 @@
-FROM python:3.12-slim
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
+# Set the working directory
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Copy the current directory contents into the container
+COPY . /app
 
-COPY . .
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# RUN pytest
+# Expose the application's port
+EXPOSE 5000
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+# Run the application
+CMD ["python", "app.py"]

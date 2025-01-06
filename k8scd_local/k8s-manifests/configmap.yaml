@@ -3,8 +3,5 @@ kind: ConfigMap
 metadata:
   name: app-config
   namespace: pyui
-data:
-  config.json: |
-    {
-      "welcome_message": "Welcome - This is a message from configmap!"
-    }
+  labels:
+    app: python-app

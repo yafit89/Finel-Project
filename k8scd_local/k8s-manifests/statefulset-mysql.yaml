@@ -4,11 +4,11 @@ metadata:
   name: mysql
   namespace: pyui
 spec:
+  serviceName: "mysql"
+  replicas: 1
   selector:
     matchLabels:
       app: mysql
-  serviceName: "mysql-service"
-  replicas: 1
   template:
     metadata:
       labels:
@@ -19,21 +19,22 @@ spec:
         image: mysql:5.7
         ports:
         - containerPort: 3306
-          name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
-              key: root-password
+              key: rootpassword
+        - name: MYSQL_DATABASE
+          value: "photo_viewer"
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql-storage
           mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
-      name: mysql-persistent-storage
+      name: mysql-storage
     spec:
       accessModes: ["ReadWriteOnce"]
       resources:
         requests:
-          storage: 20Gi
+          storage: 10Gi

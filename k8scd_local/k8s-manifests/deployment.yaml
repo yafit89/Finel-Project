@@ -18,24 +18,25 @@ spec:
         image: yafit12/pyui:v1
         ports:
         - containerPort: 5000
-        volumeMounts:
-        - name: config-volume
-          mountPath: /app/config.json
-          subPath: config.json
         env:
-        - name: ENVIRONMENT
-          value: "production"
-        - name: LOG_LEVEL
-          value: "info"
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: host
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        - name: S3_BUCKET
+          value: "yafit-s3-bucket"
         resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
           limits:
             memory: "256Mi"
-            cpu: "200m"
-      restartPolicy: Always
-      volumes:
-      - name: config-volume
-        configMap:
-          name: app-config
+            cpu: "500m"
