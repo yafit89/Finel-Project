@@ -1,12 +1,9 @@
 name: CD
 on:
   workflow_dispatch:
-     push:
-       branches:
-        - main
     inputs:
       EC2_IP:
-        description: "3.87.64.118"
+        description: "The IP address of the Kind EC2 instance"
         required: true
 
 jobs:
@@ -38,7 +35,7 @@ jobs:
 
             kubectl create ns pyui || true
 
-            Apply all manifests
+            # Apply all manifests
             kubectl apply -f configmap.yaml
             kubectl apply -f deployment.yaml
             kubectl apply -f service.yaml
