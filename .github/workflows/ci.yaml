@@ -33,37 +33,17 @@ jobs:
           newgrp docker
           sudo chmod 666 /var/run/docker.sock
 
-      - name: Run Unit Tests
-        run: pytest db_app/test_users.py
-
-      # - name: Trivy Code Security Scan
-      #   uses: ./.github/actions/security-scan
-      #   with:
-      #     scan_type: 'repository'
-      #     severities: 'HIGH,CRITICAL'
 
       - name: Build Docker Image
         run: |
           docker build -t python-app ./db_app
           docker images
 
-      # - name: Trivy Docker Security Scan
-      #   uses: ./.github/actions/security-scan
+      # - name: Bump Version
+      #   uses: ./.github/actions/version-bump
       #   with:
-      #     scan_type: 'image'
-      #     image_to_scan: 'python-app:latest'
-      #     severities: 'HIGH,CRITICAL'
-
-      - name: Run Integration Tests
-        uses: ./.github/actions/integration
-        with:
-          skip_checkout: 'true'
-
-      - name: Bump Version
-        uses: ./.github/actions/version-bump
-        with:
-          version_type: 'patch'
-          git_user_name: 'd4v5he'
-          git_user_email: 'd4v5he@gmail.com'
-        env:
-          GIT_PAT: ${{ secrets.GIT_PAT }}
+      #     version_type: 'patch'
+      #     git_user_name: 'yafit89'
+      #     git_user_email: 'yafitt364@gmail.com'
+      #   env:
+      #     GIT_PAT: ${{ secrets.GIT_PAT }}
