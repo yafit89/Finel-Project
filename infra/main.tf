@@ -10,10 +10,9 @@ module "sg" {
   vpc_id      = module.vpc.vpc_id
   extra_ports = try(each.value.extra_ports, [])
 }
+
 resource "aws_s3_bucket" "photo_bucket" {
   bucket = var.s3_bucket_name
-  acl    = "private"
-
   tags = {
     Name        = "Photo Viewer Bucket"
     Environment = "Production"
@@ -23,6 +22,7 @@ resource "aws_s3_bucket" "photo_bucket" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.photo_bucket.bucket
 }
+
 module "ec2" {
   source            = "./modules/ec2"
   for_each          = var.ec2_map
@@ -35,5 +35,6 @@ module "ec2" {
   ssh_key_name       = try(each.value.ssh_key_name, var.ssh_key_name)
   user_data          = try(each.value.user_data, "")
 
-  depends_on = [ module.sg ]
+  depends_on = [module.sg]
 }
+

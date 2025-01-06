@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       EC2_IP:
-        description: "The IP address of the Kind EC2 instance"
+        description: "3.87.64.118"
         required: true
 
 jobs:
