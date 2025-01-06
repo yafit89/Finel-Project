@@ -1,0 +1,57 @@
+# Setting Github runner (for my project is the bastion):
+sudo yum update -y
+sudo yum install -y libicu
+mkdir actions-runner && cd actions-runner
+curl -o actions-runner-linux-x64-2.321.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-x64-2.321.0.tar.gz
+tar xzf ./actions-runner-linux-x64-2.321.0.tar.gz
+./config.sh --url https://github.com/Guyabe/TF-k8s-CICD-project --token BIH5QLLDCQ3FVCBP7QJRVLLHO6REQ --unattended --replace
+sudo ./svc.sh install
+sudo ./svc.sh start
+
+---------------------------------------------
+# configuring everything on kind app:
+# install git:
+sudo yum install git -y
+
+# helm install:
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+# add helm bitnami repo:
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# install helm mysql repo:
+helm uninstall mysql-db
+helm install mysql-db bitnami/mysql \
+  --set auth.rootPassword=admin \
+  --set auth.username=admin \
+  --set auth.password=admin \
+  --set auth.database=flask_app
+
+for argocd:
+sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo chmod +x /usr/local/bin/argocd
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+
+kubectl patch svc argocd-server -n argocd \
+  -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "targetPort": 8080, "nodePort":30008}]}}'
+
+-------------------------------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-pf
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 5001
+    nodePort: 30467

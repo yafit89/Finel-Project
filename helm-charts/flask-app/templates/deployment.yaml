@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+        - name: flask-app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: S3_BUCKET_NAME
+              value: "{{ .Values.s3.bucketName }}"
+            - name: OBJECT_NAME
+              value: "{{ .Values.s3.objectName }}"
+            - name: DATABASE_URI
+              value: "{{ .Values.databaseUri }}"

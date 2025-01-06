@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>String App</title>
+</head>
+<body>
+    <div class="container">
+        <h1>String Input</h1>
+        <form method="POST">
+            <input type="text" name="string_input" placeholder="Enter a string" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <h2>Uploaded Strings</h2>
+        <ul>
+            {% for string in strings %}
+            <li>{{ string.content }}</li>
+            {% endfor %}
+        </ul>
+
+        {% if image_path %}
+        <h2>Image from S3</h2>
+        <img src="{{ url_for('static', filename=image_path) }}" alt="S3 Image">
+        {% endif %}
+    </div>
+</body>
+</html>

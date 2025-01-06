@@ -1,0 +1,14 @@
+image:
+  repository: gabecasis/flask-app
+  tag: latest
+
+service:
+  type: NodePort
+  port: 5001
+  nodePort: 32371
+
+s3:
+  bucketName: "my-s3-bucket-for-ui-images1"
+  objectName: "aws_image.png"
+
+databaseUri: "mysql+pymysql://admin:admin@mysql-db:3306/flask_app"
