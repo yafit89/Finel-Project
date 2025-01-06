@@ -2,4 +2,3 @@ mysql-connector-python
 requests==2.32.0
 flask
 boto3
-pytest==6.2.5
