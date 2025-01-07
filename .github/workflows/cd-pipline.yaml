@@ -32,6 +32,11 @@ jobs:
           port: 22
           script: |
             cd ~/repo/k8s-manifests
+<<<<<<< HEAD
+=======
+
+            kubectl create ns pyui || tru
+>>>>>>> e1c545af706d287de6e2feb1f918d12e02f65281
       
       - name: Set up Kubernetes
         run: |
